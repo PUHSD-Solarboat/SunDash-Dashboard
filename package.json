@@ -4,7 +4,9 @@
   "description": "NodeJS Electron Based Dashboard and a Arudino Xbee Reader",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "jet":"echo \"You're bad and should feel bad\" && node server.js"
   },
   "repository": {
     "type": "git",
