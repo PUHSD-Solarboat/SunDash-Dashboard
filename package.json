@@ -19,6 +19,7 @@
   "dependencies": {
     "@serialport/parser-readline": "^2.0.2",
     "express": "^4.15.2",
+    "jsonfile": "^5.0.0",
     "serialport": "^7.1.4",
     "socket.io": "^2.2.0"
   }

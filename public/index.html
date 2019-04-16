@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Socket.IO chat</title>
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <script src="js/bootstrap.js"></script>
+    <script src="js/plotly-latest.min.js"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <h4 id="raw">L.O.S</h4>
+        <div class="card-deck">
+            <div class="card">
+                <div class="card-body" style="text-align:center;">
+                    <h1 class="card-title">ADC #0</h1>
+                    <h4 id="adc_voltage_0">L.O.S</h4>
+                    <div id="adc_graph_0"></div>
+                    <h5>True Value:</h5>
+                    <input id="adc_value_0" onchange="calibrate_adc(0)" />
+
+
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body" style="text-align:center;">
+                    <h1 class="card-title">ADC #1</h1>
+                    <h4 id="adc_voltage_1">L.O.S</h4>
+                    <div id="adc_graph_1"></div>
+                    <h5>True Value:</h5>
+                    <input id="adc_value_1" onchange="calibrate_adc(1)" />
+
+
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <div class="card-deck">
+            <div class="card">
+                <div class="card-body" style="text-align:center;">
+                    <h1 class="card-title">ADC #2</h1>
+                    <h4 id="adc_voltage_2">L.O.S</h4>
+                    <div id="adc_graph_2"></div>
+                    <h5>True Value:</h5>
+                        <input id="adc_value_2" onchange="calibrate_adc(2)" />
+
+
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body" style="text-align:center;">
+                    <h1 class="card-title">ADC #3</h1>
+                    <h4 id="adc_voltage_3">L.O.S</h4>
+                    <div id="adc_graph_3"></div>
+                    <h5>True Value:</h5>
+                        <input id="adc_value_3" onchange="calibrate_adc(3)" />
+
+
+                </div>
+            </div>
+
+           
+           
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+
+        var trace_adc = {
+            y: [24, 24, 24, 24, 24, 24, 24, 24, 24, 24],
+            type: 'scatter'
+        };
+
+
+        var count = 0;
+        var last_msg = 0;
+
+        socket.on('adc_values', function (msg) {
+            document.getElementById("raw").innerHTML = msg;
+
+            for (var i = 0; i < msg.length; i++) {
+                document.getElementById("adc_voltage_" + i).innerHTML = msg[i].toFixed(2) + "v"
+            }
+
+            last_msg = msg;
+
+        });
+
+
+
+        setInterval(() => {
+            count++;
+            for (var i = 0; i < last_msg.length; i++) {
+                Plotly.extendTraces('adc_graph_' + i, {
+                    y: [
+                        [last_msg[i]]
+                    ]
+                }, [0]);
+            }
+
+
+
+
+        }, 250);
+
+        function calibrate_adc(index) {
+            var value = document.getElementById("adc_value_" + index).value;
+            socket.emit("adc_calibrate", {
+                index: index,
+                value: value
+            });
+        }
+
+        Plotly.react('adc_graph_0', [trace_adc]);
+        Plotly.react('adc_graph_1', [trace_adc]);
+        Plotly.react('adc_graph_2', [trace_adc]);
+        Plotly.react('adc_graph_3', [trace_adc]);
+    </script>
+</body>
+
+</html>
