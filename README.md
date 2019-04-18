@@ -40,7 +40,7 @@ NodeJS Electron Based Dashboard and a Arudino Xbee Reader
 ### Manual Running
 2. Open command promt (Windows Key + R, then type `cmd.exe`)
 3. Navigate to the dashboard folder (see above)
-4. Run `npm start`
+4. Run `npm start`(If this doesn't work, `node server.js`)
 5. Open a web browser and go to `localhost:3000`
 
 
